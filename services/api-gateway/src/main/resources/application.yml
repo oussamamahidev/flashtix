@@ -1,0 +1,40 @@
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: event-dev-route
+              uri: ${EVENT_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/dev/event/**
+              filters:
+                - StripPrefix=2
+
+            - id: booking-dev-route
+              uri: ${BOOKING_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/dev/booking/**
+              filters:
+                - StripPrefix=2
+
+            - id: payment-dev-route
+              uri: ${PAYMENT_SERVICE_URL:http://localhost:8083}
+              predicates:
+                - Path=/dev/payment/**
+              filters:
+                - StripPrefix=2
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
